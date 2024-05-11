@@ -23,19 +23,18 @@ public class User {
     private Long phoneNumber;
     @OneToOne
     private Wallet wallet;
-    @OneToMany(mappedBy = "owner")
+    @OneToMany
     private List<Goal> goalList;
 
-    public User(String firstName, String lastName, String email, LocalDate dateOfBirth, Boolean isEmployed, Long phoneNumber, List<Goal> goalList) {
+    public User(String firstName, String lastName, String email, LocalDate dateOfBirth, Boolean isEmployed, Long phoneNumber, Wallet wallet, List<Goal> goalList) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.isEmployed = isEmployed;
         this.phoneNumber = phoneNumber;
-        this.wallet = new Wallet();
+        this.wallet = wallet;
         this.goalList = goalList;
-
     }
 
 

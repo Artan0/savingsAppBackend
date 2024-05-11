@@ -1,6 +1,9 @@
 package com.example.savingsappbackend.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,19 +21,16 @@ public class Goal {
     private String title;
     private LocalDate targetDate;
     private String description;
-    @ManyToOne
-    private User owner;
 
     public Goal(){
 
     }
-    public Goal(Double currentAmount, Double targetAmount, String title, LocalDate targetDate, String description, User owner) {
+    public Goal(Double currentAmount, Double targetAmount, String title, LocalDate targetDate, String description) {
         this.currentAmount = currentAmount;
         this.targetAmount = targetAmount;
         this.title = title;
         this.targetDate = targetDate;
         this.description = description;
-        this.owner = owner;
     }
 
 }

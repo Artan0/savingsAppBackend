@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,10 +19,10 @@ public class Wallet {
     @OneToMany
     private List<Transaction> transactionList;
 
-    public Wallet(User user) {
-        this.budget = 0.0;
+    public Wallet(Double budget, User user, List<Transaction> transactionList) {
+        this.budget = budget;
         this.user = user;
-        this.transactionList = new ArrayList<>();
+        this.transactionList = transactionList;
     }
 
     public Wallet() {
