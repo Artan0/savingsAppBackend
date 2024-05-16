@@ -19,7 +19,7 @@ public class Goal {
     private String title;
     private LocalDate targetDate;
     private String description;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User owner;
 

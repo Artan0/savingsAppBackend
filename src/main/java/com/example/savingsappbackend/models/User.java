@@ -25,7 +25,7 @@ public class User {
     private LocalDate dateOfBirth;
     private Boolean isEmployed;
     private Long phoneNumber;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Wallet wallet;
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Goal> goalList;
