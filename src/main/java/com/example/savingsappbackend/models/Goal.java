@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+@Table(name = "goals")
 public class Goal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +19,10 @@ public class Goal {
     private String title;
     private LocalDate targetDate;
     private String description;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User owner;
+
 
     public Goal(){
 

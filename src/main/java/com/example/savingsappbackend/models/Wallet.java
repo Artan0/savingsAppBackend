@@ -10,14 +10,16 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "wallets")
 public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double budget;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> transactionList;
 
     public Wallet(User user) {

@@ -1,9 +1,6 @@
 package com.example.savingsappbackend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+@Table(name = "transactions")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +17,7 @@ public class Transaction {
     private String title;
     private LocalDate date;
     private Double amount;
+    @Enumerated(EnumType.STRING)
     private TransactionType type;
 
     public Transaction(String title, LocalDate date, Double amount, TransactionType type) {
