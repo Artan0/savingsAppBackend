@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface GoalService {
     public Goal getById(Long goalId);
-    public List<Goal> getAllGoals(Long userId);
+    public List<Goal> getAllGoals(Long userId, int page, int pageSize);
+
+
     public Goal newGoal(Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Long id);
     /* possible problems with ownerId */
     public Goal editGoal(Long goalId, Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description);
