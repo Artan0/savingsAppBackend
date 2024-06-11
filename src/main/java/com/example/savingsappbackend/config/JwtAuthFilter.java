@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 
 @RequiredArgsConstructor
@@ -27,8 +26,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (header != null) {
             String[] authElements = header.split(" ");
 
-            if (authElements.length == 2
-                    && "Bearer".equals(authElements[0])) {
+            if (authElements.length == 2 && "Bearer".equals(authElements[0])) {
                 try {
                     SecurityContextHolder.getContext().setAuthentication(
                             userAuthenticationProvider.validateToken(authElements[1]));

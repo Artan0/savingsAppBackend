@@ -1,6 +1,5 @@
 package com.example.savingsappbackend.config;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,11 +28,9 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.POST, "/login", "/register")
-                        .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/newGoal").authenticated()
-                        .anyRequest().authenticated())
-        ;
+                        .anyRequest().authenticated());
         return http.build();
     }
 }

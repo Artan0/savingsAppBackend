@@ -2,6 +2,7 @@ package com.example.savingsappbackend.service.impl;
 
 import com.example.savingsappbackend.models.Goal;
 import com.example.savingsappbackend.models.User;
+import com.example.savingsappbackend.models.dto.UserDto;
 import com.example.savingsappbackend.models.exceptions.GoalNotFoundException;
 import com.example.savingsappbackend.repository.GoalRepository;
 import com.example.savingsappbackend.repository.UserRepository;
@@ -37,12 +38,12 @@ public class GoalServiceImplementation implements GoalService{
 
     @Override
     public Goal newGoal(Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Long userId) {
-        User user = this.userRepository.getReferenceById(userId);
+        User user = userRepository.findById(userId).orElseThrow(GoalNotFoundException::new);
         Goal goal = new Goal(currentAmt, targetAmt, title, targetDate, description, user);
         this.goalRepository.save(goal);
-
         return goal;
     }
+
 
     @Override
     public Goal editGoal(Long goalId, Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description) {

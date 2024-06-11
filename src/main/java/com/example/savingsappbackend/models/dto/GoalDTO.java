@@ -1,8 +1,10 @@
 package com.example.savingsappbackend.models.dto;
 
-import java.time.LocalDate;
+import lombok.Data;
 
-public class NewGoalDTO {
+import java.time.LocalDate;
+@Data
+public class GoalDTO {
 
     public Double currentAmt;
     public Double targetAmt;
@@ -11,7 +13,7 @@ public class NewGoalDTO {
     public String description;
     public Long id;
 
-    public NewGoalDTO(Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Long id) {
+    public GoalDTO(Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Long id) {
         this.currentAmt = currentAmt;
         this.targetAmt = targetAmt;
         this.title = title;
