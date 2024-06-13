@@ -1,5 +1,6 @@
 package com.example.savingsappbackend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,9 +27,12 @@ public class User {
     private Boolean isEmployed;
     private Long phoneNumber;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore // Ignore wallet when serializing User to prevent circular reference
     private Wallet wallet;
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // Ignore goalList when serializing User to prevent circular reference
     private List<Goal> goalList;
+
 
     public User(String firstName, String lastName, String email,String password, LocalDate dateOfBirth, Boolean isEmployed, Long phoneNumber) {
         this.firstName = firstName;

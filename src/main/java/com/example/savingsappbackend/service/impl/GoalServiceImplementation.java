@@ -7,6 +7,8 @@ import com.example.savingsappbackend.models.exceptions.GoalNotFoundException;
 import com.example.savingsappbackend.repository.GoalRepository;
 import com.example.savingsappbackend.repository.UserRepository;
 import com.example.savingsappbackend.service.GoalService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,11 +30,13 @@ public class GoalServiceImplementation implements GoalService{
         return this.goalRepository.findById(goalId).orElseThrow(GoalNotFoundException::new);
     }
 
-    @Override
-    public List<Goal> getAllGoals(Long userId, int page, int pageSize) {
-        List<Goal> goals = this.userRepository.getReferenceById(userId).getGoalList();
-        int skip = (page - 1) * pageSize;
-        return goals.stream().skip(skip).limit(pageSize).collect(Collectors.toList());
+    public Page<Goal> getAllGoals(Long userId, String search, Pageable pageable) {
+        User user = this.userRepository.getReferenceById(userId);
+        if (search == null || search.isEmpty()) {
+            return this.goalRepository.findByOwner(user, pageable);
+        } else {
+            return this.goalRepository.findByOwnerAndTitleContainingIgnoreCase(user, search, pageable);
+        }
     }
 
 

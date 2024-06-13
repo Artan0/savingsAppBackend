@@ -1,5 +1,6 @@
 package com.example.savingsappbackend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class Wallet {
     private Double budget;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> transactionList;
