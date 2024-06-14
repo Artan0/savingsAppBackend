@@ -1,20 +1,22 @@
 package com.example.savingsappbackend.models.dto;
 
-import java.time.LocalDate;
+import lombok.Data;
 
+import java.time.LocalDate;
+@Data
 public class EditGoalDTO {
     public Long goalId;
-    public Double currentAmt;
-    public Double targetAmt;
+    public Double currentAmount;
+    public Double targetAmount;
     public String title;
     public LocalDate targetDate;
     public String description;
     public Long id;
 
-    public EditGoalDTO(Long goalId, Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Long id) {
+    public EditGoalDTO(Long goalId, Double currentAmount, Double targetAmount, String title, LocalDate targetDate, String description, Long id) {
         this.goalId = goalId;
-        this.currentAmt = currentAmt;
-        this.targetAmt = targetAmt;
+        this.currentAmount = currentAmount;
+        this.targetAmount = targetAmount;
         this.title = title;
         this.targetDate = targetDate;
         this.description = description;

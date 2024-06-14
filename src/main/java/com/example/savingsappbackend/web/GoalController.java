@@ -32,7 +32,11 @@ public class GoalController {
     }
 
     @GetMapping("/goal/{id}")
-    public ResponseEntity<Goal> getGoalById(@PathVariable Long id) {
+    public ResponseEntity<Goal> getGoalById(@PathVariable Long id,
+                                            @RequestHeader("Authorization") String token
+                                            ) {
+        String userEmail = userAuthenticationProvider.getEmailFromToken(token);
+        UserDto user = userService.findByEmail(userEmail);
         Goal goal = this.service.getById(id);
         if (goal == null) {
             return ResponseEntity.notFound().build();
@@ -73,16 +77,19 @@ public class GoalController {
                 data.getTargetDate(), data.getDescription(), user.getId());
         return ResponseEntity.ok(goal);
     }
-
-//    @PostMapping("/editGoal")
-//    public ResponseEntity<Goal> editGoal(@RequestBody EditGoalDTO data) {
-//        Goal goal = this.service.editGoal(data.getGoalId(), data.getCurrentAmt(), data.getTargetAmt(),
-//                data.getTitle(), data.getTargetDate(), data.getDescription());
-//        return ResponseEntity.ok(goal);
-//    }
+    @PostMapping("/editGoal")
+    public ResponseEntity<Goal> editGoal(@RequestBody EditGoalDTO data, @RequestHeader("Authorization") String token) {
+        String userEmail = userAuthenticationProvider.getEmailFromToken(token);
+        UserDto user = userService.findByEmail(userEmail);
+        Goal goal = this.service.editGoal(data.getGoalId(), data.getCurrentAmount(), data.getTargetAmount(),
+                data.getTitle(), data.getTargetDate(), data.getDescription());
+        return ResponseEntity.ok(goal);
+    }
 
     @DeleteMapping("/delete/{goalId}")
-    public ResponseEntity<Void> deleteGoal(@PathVariable Long goalId) {
+    public ResponseEntity<Void> deleteGoal(@PathVariable Long goalId, @RequestHeader("Authorization") String token) {
+        String userEmail = userAuthenticationProvider.getEmailFromToken(token);
+        UserDto user = userService.findByEmail(userEmail);
         if (this.service.getById(goalId) == null) {
             return ResponseEntity.notFound().build();
         }

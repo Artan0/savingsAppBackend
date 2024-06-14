@@ -27,10 +27,10 @@ public class User {
     private Boolean isEmployed;
     private Long phoneNumber;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore // Ignore wallet when serializing User to prevent circular reference
+    @JsonIgnore
     private Wallet wallet;
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore // Ignore goalList when serializing User to prevent circular reference
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonIgnore
     private List<Goal> goalList;
 
 
