@@ -7,12 +7,10 @@ import com.example.savingsappbackend.models.dto.UserDto;
 import com.example.savingsappbackend.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -41,6 +39,18 @@ public class AuthController {
         String email = userAuthenticationProvider.getEmailFromToken(request.getHeader("Authorization"));
         UserDto userDto = userService.findByEmail(email);
         return ResponseEntity.ok(userDto);
+    }
+
+    @PutMapping("/update-profile/{userId}")
+    public ResponseEntity<UserDto> updateProfile(
+            @PathVariable Long userId,
+            @RequestHeader("Authorization") String token,
+            @RequestBody UserDto data
+    ) {
+        String userEmail = userAuthenticationProvider.getEmailFromToken(token);
+        UserDto user = userService.findByEmail(userEmail);
+        UserDto updatedUser = userService.updateProfile(userId, data.getFirstName(), data.getLastName(), data.getEmail(), data.getDateOfBirth(), data.getPhoneNumber());
+        return ResponseEntity.ok(updatedUser);
     }
 
 }

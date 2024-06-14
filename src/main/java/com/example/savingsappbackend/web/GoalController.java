@@ -67,8 +67,6 @@ public class GoalController {
     }
 
 
-
-
     @PostMapping("/newGoal")
     public ResponseEntity<Goal> createNewGoal(@RequestBody GoalDTO data, @RequestHeader("Authorization") String token) {
         String userEmail = userAuthenticationProvider.getEmailFromToken(token);

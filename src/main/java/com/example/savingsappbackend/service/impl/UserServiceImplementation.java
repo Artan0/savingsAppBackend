@@ -11,11 +11,13 @@ import com.example.savingsappbackend.models.exceptions.AppException;
 import com.example.savingsappbackend.repository.UserRepository;
 import com.example.savingsappbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -66,5 +68,19 @@ public class UserServiceImplementation implements UserService {
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
         return userMapper.toUserDto(user);
     }
+
+    public UserDto updateProfile(Long userId, String firstName, String lastName, String email, LocalDate dateOfBirth, Long phoneNumber) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
+
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
+        user.setDateOfBirth(dateOfBirth);
+        User updatedUser = userRepository.save(user);
+        return userMapper.toUserDto(updatedUser);
+    }
+
 
 }
