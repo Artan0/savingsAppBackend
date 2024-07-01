@@ -33,4 +33,12 @@ public class Wallet {
     public Wallet() {
 
     }
+    public void decreaseBudget(Double amount) {
+        if (this.budget >= amount) {
+            this.budget -= amount;
+//        } else {
+//            throw new InsufficientBudgetException("Not enough budget to allocate for savings.");
+//        }
+    }
+    }
 }

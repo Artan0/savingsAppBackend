@@ -66,10 +66,14 @@ public class UserServiceImplementation implements UserService {
     public UserDto findByEmail(String login) {
         User user = userRepository.findByEmail(login)
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
-        return userMapper.toUserDto(user);
+
+        UserDto dto = userMapper.toUserDto(user);
+        dto.setBudget(user.getWallet().getBudget());
+
+        return dto;
     }
 
-    public UserDto updateProfile(Long userId, String firstName, String lastName, String email, LocalDate dateOfBirth, Long phoneNumber) {
+    public UserDto updateProfile(Long userId, String firstName, String lastName, String email, LocalDate dateOfBirth, Long phoneNumber, Double budget) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
 
@@ -78,6 +82,7 @@ public class UserServiceImplementation implements UserService {
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setDateOfBirth(dateOfBirth);
+        user.getWallet().setBudget(budget);
         User updatedUser = userRepository.save(user);
         return userMapper.toUserDto(updatedUser);
     }

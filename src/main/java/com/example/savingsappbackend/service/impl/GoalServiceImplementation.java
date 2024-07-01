@@ -2,6 +2,7 @@ package com.example.savingsappbackend.service.impl;
 
 import com.example.savingsappbackend.models.Goal;
 import com.example.savingsappbackend.models.User;
+import com.example.savingsappbackend.models.Wallet;
 import com.example.savingsappbackend.models.dto.UserDto;
 import com.example.savingsappbackend.models.exceptions.GoalNotFoundException;
 import com.example.savingsappbackend.repository.GoalRepository;
@@ -41,16 +42,22 @@ public class GoalServiceImplementation implements GoalService{
 
 
     @Override
-    public Goal newGoal(Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Long userId) {
+    public Goal newGoal(Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Long userId, Double savingsAmount, String savingsPeriod) {
         User user = userRepository.findById(userId).orElseThrow(GoalNotFoundException::new);
-        Goal goal = new Goal(currentAmt, targetAmt, title, targetDate, description, user);
+        Wallet wallet = user.getWallet();
+
+        wallet.decreaseBudget(currentAmt);
+        userRepository.save(user);
+
+        Goal goal = new Goal(currentAmt, targetAmt, savingsAmount, savingsPeriod, title, targetDate, description, user);
         this.goalRepository.save(goal);
         return goal;
     }
 
 
+
     @Override
-    public Goal editGoal(Long goalId, Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description) {
+    public Goal editGoal(Long goalId, Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Double savingsAmount, String savingsPeriod) {
         Goal goal = this.goalRepository.findById(goalId).orElseThrow(GoalNotFoundException::new);
 
         goal.setCurrentAmount(currentAmt);
@@ -58,7 +65,8 @@ public class GoalServiceImplementation implements GoalService{
         goal.setTitle(title);
         goal.setTargetDate(targetDate);
         goal.setDescription(description);
-
+        goal.setSavingsAmount(savingsAmount);
+        goal.setSavingsPeriod(savingsPeriod);
         this.goalRepository.save(goal);
 
         return goal;

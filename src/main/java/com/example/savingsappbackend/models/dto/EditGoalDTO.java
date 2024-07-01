@@ -12,8 +12,10 @@ public class EditGoalDTO {
     public LocalDate targetDate;
     public String description;
     public Long id;
+    public Double savingsAmount;
+    public String savingsPeriod;
 
-    public EditGoalDTO(Long goalId, Double currentAmount, Double targetAmount, String title, LocalDate targetDate, String description, Long id) {
+    public EditGoalDTO(Long goalId, Double currentAmount, Double targetAmount, String title, LocalDate targetDate, String description, Long id, Double savingsAmount, String savingsPeriod) {
         this.goalId = goalId;
         this.currentAmount = currentAmount;
         this.targetAmount = targetAmount;
@@ -21,5 +23,7 @@ public class EditGoalDTO {
         this.targetDate = targetDate;
         this.description = description;
         this.id = id;
+        this.savingsAmount = savingsAmount;
+        this.savingsPeriod = savingsPeriod;
     }
 }

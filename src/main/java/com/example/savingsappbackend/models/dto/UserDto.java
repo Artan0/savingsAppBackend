@@ -23,5 +23,6 @@ public class UserDto {
     private LocalDate dateOfBirth;
     private Long phoneNumber;
     private String token;
+    private Double budget;
 
 }

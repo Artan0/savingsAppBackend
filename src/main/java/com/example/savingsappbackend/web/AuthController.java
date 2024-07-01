@@ -49,7 +49,7 @@ public class AuthController {
     ) {
         String userEmail = userAuthenticationProvider.getEmailFromToken(token);
         UserDto user = userService.findByEmail(userEmail);
-        UserDto updatedUser = userService.updateProfile(userId, data.getFirstName(), data.getLastName(), data.getEmail(), data.getDateOfBirth(), data.getPhoneNumber());
+        UserDto updatedUser = userService.updateProfile(userId, data.getFirstName(), data.getLastName(), data.getEmail(), data.getDateOfBirth(), data.getPhoneNumber(), data.getBudget());
         return ResponseEntity.ok(updatedUser);
     }
 

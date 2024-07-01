@@ -10,8 +10,7 @@ import java.util.List;
 public interface GoalService {
     public Goal getById(Long goalId);
     public Page<Goal> getAllGoals(Long userId, String search, Pageable pageable) ;
-    public Goal newGoal(Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Long id);
-    /* possible problems with ownerId */
-    public Goal editGoal(Long goalId, Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description);
+    public Goal newGoal(Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Long userId, Double savingsAmount, String savingsPeriod);
+    public Goal editGoal(Long goalId, Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Double savingsAmount, String savingsPeriod);
     public void deleteGoal(Long goalId);
 }

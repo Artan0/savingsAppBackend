@@ -10,5 +10,5 @@ public interface UserService {
     UserDto login(CredentialsDto credentialsDto);
     UserDto register(SignUpDto userDto);
     UserDto findByEmail(String login);
-    UserDto updateProfile(Long userId, String firstName, String lastName, String email, LocalDate dateOfBirth, Long phoneNumber);
+    UserDto updateProfile(Long userId, String firstName, String lastName, String email, LocalDate dateOfBirth, Long phoneNumber, Double budget);
     }

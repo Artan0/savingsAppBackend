@@ -72,7 +72,7 @@ public class GoalController {
         String userEmail = userAuthenticationProvider.getEmailFromToken(token);
         UserDto user = userService.findByEmail(userEmail);
         Goal goal = this.service.newGoal(data.getCurrentAmt(), data.getTargetAmt(), data.getTitle(),
-                data.getTargetDate(), data.getDescription(), user.getId());
+                data.getTargetDate(), data.getDescription(), user.getId(), data.getSavingsAmount(), data.getSavingsPeriod());
         return ResponseEntity.ok(goal);
     }
     @PostMapping("/editGoal")
@@ -80,7 +80,7 @@ public class GoalController {
         String userEmail = userAuthenticationProvider.getEmailFromToken(token);
         UserDto user = userService.findByEmail(userEmail);
         Goal goal = this.service.editGoal(data.getGoalId(), data.getCurrentAmount(), data.getTargetAmount(),
-                data.getTitle(), data.getTargetDate(), data.getDescription());
+                data.getTitle(), data.getTargetDate(), data.getDescription(), data.getSavingsAmount(), data.getSavingsPeriod());
         return ResponseEntity.ok(goal);
     }
 
