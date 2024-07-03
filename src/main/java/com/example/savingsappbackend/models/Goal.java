@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -24,7 +25,7 @@ public class Goal {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User owner;
-    private LocalDate lastUpdated;
+    private LocalDateTime lastUpdated;
 
 
 
@@ -41,6 +42,8 @@ public class Goal {
         this.targetDate = targetDate;
         this.description = description;
         this.owner = owner;
+        this.lastUpdated = LocalDateTime.now();
+
     }
     public void increaseCurrentAmount(Double amount) {
         this.currentAmount += amount;

@@ -1,11 +1,14 @@
 package com.example.savingsappbackend.config;
 
 import com.example.savingsappbackend.models.Goal;
+import com.example.savingsappbackend.models.User;
 import com.example.savingsappbackend.models.Wallet;
 import com.example.savingsappbackend.repository.GoalRepository;
 import com.example.savingsappbackend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,31 +19,43 @@ public class BudgetUpdateScheduler {
 
     private final GoalRepository goalRepository;
     private final UserRepository userRepository;
+    private final PlatformTransactionManager transactionManager;
 
-    public BudgetUpdateScheduler(GoalRepository goalRepository, UserRepository userRepository) {
+    public BudgetUpdateScheduler(GoalRepository goalRepository, UserRepository userRepository, PlatformTransactionManager transactionManager) {
         this.goalRepository = goalRepository;
         this.userRepository = userRepository;
+        this.transactionManager = transactionManager;
     }
 
     @Scheduled(cron = "0 * * * * *")
+    @Transactional
     public void updateBudgets() {
         List<Goal> goals = goalRepository.findAll();
         for (Goal goal : goals) {
             LocalDateTime now = LocalDateTime.now();
             String period = goal.getSavingsPeriod();
 
-            if (shouldUpdateBudget(now, goal.getLastUpdated().atStartOfDay(), period)) {
-                Wallet wallet = goal.getOwner().getWallet();
+            if (shouldUpdateBudget(now, goal.getLastUpdated(), period) && canUpdateGoal(goal)) {
+                User user = userRepository.findByIdWithWallet(goal.getOwner().getId()).orElse(null);
+
+                if (user == null || user.getWallet() == null) {
+                    continue;
+                }
+
+                Wallet wallet = user.getWallet();
                 wallet.decreaseBudget(goal.getSavingsAmount());
                 goal.increaseCurrentAmount(goal.getSavingsAmount());
-                userRepository.save(goal.getOwner());
-                goal.setLastUpdated(LocalDate.from(now));
+                userRepository.save(user);
+                goal.setLastUpdated(now);
                 goalRepository.save(goal);
             }
         }
     }
 
     private boolean shouldUpdateBudget(LocalDateTime now, LocalDateTime lastUpdated, String period) {
+        if (period == null) {
+            return false;
+        }
         return switch (period.toLowerCase()) {
             case "minute" -> now.minusMinutes(1).isAfter(lastUpdated);
             case "daily" -> now.toLocalDate().isAfter(lastUpdated.toLocalDate());
@@ -48,5 +63,12 @@ public class BudgetUpdateScheduler {
             case "monthly" -> now.toLocalDate().minusMonths(1).isAfter(lastUpdated.toLocalDate());
             default -> false;
         };
+    }
+
+    private boolean canUpdateGoal(Goal goal) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDate targetDate = goal.getTargetDate();
+
+        return (goal.getCurrentAmount() < goal.getTargetAmount()) && (targetDate == null || now.toLocalDate().isBefore(targetDate));
     }
 }
