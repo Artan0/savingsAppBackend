@@ -8,7 +8,6 @@ import com.example.savingsappbackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,13 +18,12 @@ public class BudgetUpdateScheduler {
 
     private final GoalRepository goalRepository;
     private final UserRepository userRepository;
-    private final PlatformTransactionManager transactionManager;
 
-    public BudgetUpdateScheduler(GoalRepository goalRepository, UserRepository userRepository, PlatformTransactionManager transactionManager) {
+    public BudgetUpdateScheduler(GoalRepository goalRepository, UserRepository userRepository) {
         this.goalRepository = goalRepository;
         this.userRepository = userRepository;
-        this.transactionManager = transactionManager;
     }
+
 
     @Scheduled(cron = "0 * * * * *")
     @Transactional

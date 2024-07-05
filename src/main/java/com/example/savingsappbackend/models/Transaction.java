@@ -14,20 +14,26 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
     private LocalDate date;
     private Double amount;
+
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
-    public Transaction(String title, LocalDate date, Double amount, TransactionType type) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Transaction(String title, LocalDate date, Double amount, TransactionType type, User user) {
         this.title = title;
         this.date = date;
         this.amount = amount;
         this.type = type;
+        this.user = user;
     }
 
     public Transaction() {
-
     }
 }
