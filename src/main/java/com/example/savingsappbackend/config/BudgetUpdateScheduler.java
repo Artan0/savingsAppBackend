@@ -1,10 +1,9 @@
 package com.example.savingsappbackend.config;
 
-import com.example.savingsappbackend.models.Goal;
-import com.example.savingsappbackend.models.User;
-import com.example.savingsappbackend.models.Wallet;
+import com.example.savingsappbackend.models.*;
 import com.example.savingsappbackend.repository.GoalRepository;
 import com.example.savingsappbackend.repository.UserRepository;
+import com.example.savingsappbackend.service.TransactionService;
 import jakarta.transaction.Transactional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,10 +17,11 @@ public class BudgetUpdateScheduler {
 
     private final GoalRepository goalRepository;
     private final UserRepository userRepository;
-
-    public BudgetUpdateScheduler(GoalRepository goalRepository, UserRepository userRepository) {
+    private final TransactionService transactionService;
+    public BudgetUpdateScheduler(GoalRepository goalRepository, UserRepository userRepository, TransactionService transactionService) {
         this.goalRepository = goalRepository;
         this.userRepository = userRepository;
+        this.transactionService = transactionService;
     }
 
 
@@ -40,12 +40,20 @@ public class BudgetUpdateScheduler {
                     continue;
                 }
 
+                //ALTER TABLE transactions
+                //DROP CONSTRAINT IF EXISTS transactions_type_check;
+                //
+                //ALTER TABLE transactions
+                //ADD CONSTRAINT transactions_type_check
+                //CHECK (type IN ('INCOME', 'EXPENSE', 'SAVINGS'));
+
                 Wallet wallet = user.getWallet();
                 wallet.decreaseBudget(goal.getSavingsAmount());
                 goal.increaseCurrentAmount(goal.getSavingsAmount());
                 userRepository.save(user);
                 goal.setLastUpdated(now);
                 goalRepository.save(goal);
+                transactionService.createTransaction("Savings", LocalDate.now(), goal.getSavingsAmount(), TransactionType.SAVINGS,user.getId());
             }
         }
     }

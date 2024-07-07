@@ -35,7 +35,7 @@ public class TransactionController {
     public ResponseEntity<Map<String, Object>> getTransactionsByUserId(
             @RequestHeader("Authorization") String token,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer pageSize
+            @RequestParam(defaultValue = "6") Integer pageSize
     ) {
         String userEmail = userAuthenticationProvider.getEmailFromToken(token);
         UserDto user = userService.findByEmail(userEmail);
