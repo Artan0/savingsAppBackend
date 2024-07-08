@@ -14,7 +14,7 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     List<Transaction> findByUserId(Long userId);
     Page<Transaction> findByUser(User owner, Pageable pageable);
-
+    List<Transaction> findTransactionsByUser(User user);
     Page<Transaction> findByUserAndTitleContainingIgnoreCase(User owner, String title, Pageable pageable);
 
 }

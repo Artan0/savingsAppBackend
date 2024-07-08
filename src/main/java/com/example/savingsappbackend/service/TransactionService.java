@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface TransactionService {
     Transaction getById(Long transactionId);
@@ -18,5 +19,7 @@ public interface TransactionService {
 
 
     void deleteTransaction(Long transactionId);
-}
+     Map<String, Double> getTransactionSummaryByType(Long userId);
+
+    }
 

@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -60,5 +62,23 @@ public class TransactionServiceImplementation implements TransactionService {
     public void deleteTransaction(Long transactionId) {
         Transaction transaction = getById(transactionId);
         transactionRepository.delete(transaction);
+    }
+
+    @Override
+    public Map<String, Double> getTransactionSummaryByType(Long userId) {
+        User user = this.userRepository.getReferenceById(userId);
+        List<Transaction> transactions = transactionRepository.findTransactionsByUser(user);
+
+        Map<String, Double> summary = new HashMap<>();
+        for (TransactionType type : TransactionType.values()) {
+            summary.put(type.name(), 0.0);
+        }
+
+        for (Transaction transaction : transactions) {
+            String type = transaction.getType().name();
+            summary.put(type, summary.get(type) + transaction.getAmount());
+        }
+
+        return summary;
     }
 }

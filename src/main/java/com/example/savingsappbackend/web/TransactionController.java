@@ -74,4 +74,14 @@ public class TransactionController {
         transactionService.deleteTransaction(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/transactionSummary")
+    public ResponseEntity<Map<String, Double>> getTransactionSummaryByType(@RequestHeader("Authorization") String token) {
+        String userEmail = userAuthenticationProvider.getEmailFromToken(token);
+        UserDto user = userService.findByEmail(userEmail);
+
+        Map<String, Double> summary = transactionService.getTransactionSummaryByType(user.getId());
+
+        return ResponseEntity.ok(summary);
+    }
 }
