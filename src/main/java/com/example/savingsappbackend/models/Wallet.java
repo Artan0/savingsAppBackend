@@ -34,12 +34,13 @@ public class Wallet {
     @CollectionTable(name = "wallet_history", joinColumns = @JoinColumn(name = "wallet_id"))
     @MapKeyColumn(name = "history_date")
     @Column(name = "budget")
-    private Map<LocalDate, Double> historyMap = new HashMap<>();
+    private Map<LocalDate, Double> historyMap;
 
     public Wallet(User user) {
         this.budget = 0.0;
         this.user = user;
         this.transactionList = new ArrayList<>();
+        this.historyMap = new HashMap<>();
     }
 
     public Wallet() {

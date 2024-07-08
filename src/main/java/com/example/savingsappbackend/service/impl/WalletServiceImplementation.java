@@ -1,7 +1,6 @@
 package com.example.savingsappbackend.service.impl;
 
 import com.example.savingsappbackend.models.Wallet;
-import com.example.savingsappbackend.models.WalletHistory;
 import com.example.savingsappbackend.models.dto.BalanceHistoryDto;
 import com.example.savingsappbackend.repository.WalletRepository;
 import com.example.savingsappbackend.service.WalletService;
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 @Service
 public class WalletServiceImplementation implements WalletService {
     private final WalletRepository walletRepository;
-
     public WalletServiceImplementation(WalletRepository walletRepository) {
         this.walletRepository = walletRepository;
     }
@@ -34,10 +32,15 @@ public class WalletServiceImplementation implements WalletService {
     @Override
     public List<BalanceHistoryDto> getBalanceHistory(Long userId) {
         Wallet wallet = walletRepository.findByUserId(userId);
+        LocalDate today = LocalDate.now();
+        LocalDate sevenDaysAgo = today.minusDays(6);
+
         return wallet.getHistoryMap().entrySet().stream()
+                .filter(entry -> (entry.getKey().isAfter(sevenDaysAgo) || entry.getKey().isEqual(sevenDaysAgo)) && entry.getKey().isBefore(today.plusDays(1)))
                 .map(entry -> new BalanceHistoryDto(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
     }
+
 
     @Scheduled(cron = "0 0 0 * * *")
     public void updateDailyHistory() {
@@ -48,6 +51,8 @@ public class WalletServiceImplementation implements WalletService {
             Double currentBudget = wallet.getBudget();
             wallet.addHistory(today, currentBudget);
             walletRepository.save(wallet);
+            System.out.println("Updated wallet " + wallet.getId() + " with budget " + currentBudget + " for date " + today);
         });
     }
+
 }
