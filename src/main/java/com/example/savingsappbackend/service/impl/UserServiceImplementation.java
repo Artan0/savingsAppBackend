@@ -69,6 +69,7 @@ public class UserServiceImplementation implements UserService {
 
         UserDto dto = userMapper.toUserDto(user);
         dto.setBudget(user.getWallet().getBudget());
+        dto.setSavingsBalance(user.getWallet().getSavingsBalance());
 
         return dto;
     }

@@ -51,6 +51,7 @@ public class BudgetUpdateScheduler {
 
                 Wallet wallet = user.getWallet();
                 wallet.decreaseBudget(goal.getSavingsAmount());
+                wallet.increaseSavingsBalance(goal.getSavingsAmount());
                 goal.increaseCurrentAmount(goal.getSavingsAmount());
                 userRepository.save(user);
                 goal.setLastUpdated(now);

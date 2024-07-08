@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.transaction.NoTransactionException;
+import org.springframework.web.server.MethodNotAllowedException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class Wallet {
     private Long id;
 
     private Double budget;
-
+    private Double savingsBalance;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @JsonIgnore
@@ -38,6 +40,7 @@ public class Wallet {
 
     public Wallet(User user) {
         this.budget = 0.0;
+        this.savingsBalance = 0.0;
         this.user = user;
         this.transactionList = new ArrayList<>();
         this.historyMap = new HashMap<>();
@@ -50,13 +53,15 @@ public class Wallet {
     public void decreaseBudget(Double amount) {
         if (this.budget >= amount) {
             this.budget -= amount;
+        } else {
+            throw new RuntimeException("Not Allowed");
         }
-//        } else {
-////            throw new InsufficientBudgetException("Not enough budget to allocate for savings.");
-////        }
     }
-
     public void addHistory(LocalDate date, Double budget) {
         this.historyMap.put(date, budget);
+    }
+
+    public void increaseSavingsBalance(Double amount){
+        this.savingsBalance+=amount;
     }
 }

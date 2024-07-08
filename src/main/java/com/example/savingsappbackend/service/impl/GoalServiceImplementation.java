@@ -47,6 +47,7 @@ public class GoalServiceImplementation implements GoalService{
         Wallet wallet = user.getWallet();
 
         wallet.decreaseBudget(currentAmt);
+        wallet.increaseSavingsBalance(currentAmt);
         userRepository.save(user);
 
         Goal goal = new Goal(currentAmt, targetAmt, savingsAmount, savingsPeriod, title, targetDate, description, user);

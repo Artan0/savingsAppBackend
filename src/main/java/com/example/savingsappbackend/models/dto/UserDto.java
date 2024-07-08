@@ -24,5 +24,6 @@ public class UserDto {
     private Long phoneNumber;
     private String token;
     private Double budget;
+    private Double savingsBalance;
 
 }
