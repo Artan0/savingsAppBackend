@@ -40,12 +40,14 @@ public class BudgetUpdateScheduler {
                     continue;
                 }
 
-                //ALTER TABLE transactions
-                //DROP CONSTRAINT IF EXISTS transactions_type_check;
-                //
-                //ALTER TABLE transactions
-                //ADD CONSTRAINT transactions_type_check
-                //CHECK (type IN ('INCOME', 'EXPENSE', 'SAVINGS'));
+
+
+//                ALTER TABLE transactions
+//                DROP CONSTRAINT IF EXISTS transactions_type_check;
+//
+//                ALTER TABLE transactions
+//                ADD CONSTRAINT transactions_type_check
+//                CHECK (type IN ('INCOME', 'EXPENSE', 'SAVINGS'));
 
                 Wallet wallet = user.getWallet();
                 wallet.decreaseBudget(goal.getSavingsAmount());
@@ -75,6 +77,17 @@ public class BudgetUpdateScheduler {
         LocalDateTime now = LocalDateTime.now();
         LocalDate targetDate = goal.getTargetDate();
 
-        return (goal.getCurrentAmount() < goal.getTargetAmount()) && (targetDate == null || now.toLocalDate().isBefore(targetDate));
+        if (goal.getCurrentAmount() < goal.getTargetAmount()) {
+            if (targetDate == null || now.toLocalDate().isBefore(targetDate)) {
+                return true;
+            } else {
+                goal.setOverdued(true);
+                return false;
+            }
+        } else {
+            goal.setCompleted(true);
+            return false;
+        }
+
     }
 }

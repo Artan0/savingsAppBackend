@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -28,6 +29,8 @@ public class Goal {
     @JoinColumn(name = "user_id")
     private User owner;
     private LocalDateTime lastUpdated;
+    private boolean isCompleted;
+    private boolean isOverdued;
 
 
 
@@ -45,6 +48,8 @@ public class Goal {
         this.description = description;
         this.owner = owner;
         this.lastUpdated = LocalDateTime.now();
+        this.isCompleted = Objects.equals(this.targetAmount, currentAmount);
+        this.isOverdued = this.targetDate.isBefore(LocalDate.now());
 
     }
     public void increaseCurrentAmount(Double amount) {
