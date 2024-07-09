@@ -4,6 +4,7 @@ import com.example.savingsappbackend.models.Goal;
 import com.example.savingsappbackend.models.dto.EditGoalDTO;
 import com.example.savingsappbackend.models.dto.GoalDTO;
 import com.example.savingsappbackend.models.dto.UserDto;
+import com.example.savingsappbackend.models.dto.WeeklyGoalStats;
 import com.example.savingsappbackend.service.GoalService;
 import com.example.savingsappbackend.service.UserService;
 import com.example.savingsappbackend.config.UserAuthenticationProvider;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -92,4 +94,15 @@ public class GoalController {
         this.service.deleteGoal(goalId);
         return ResponseEntity.ok().build();
     }
+
+
+
+    @GetMapping("/goalStats")
+    public ResponseEntity<List<WeeklyGoalStats>> getWeeklyGoalStats(@RequestHeader("Authorization") String token) {
+        String userEmail = userAuthenticationProvider.getEmailFromToken(token);
+        UserDto user = userService.findByEmail(userEmail);
+        List<WeeklyGoalStats> stats = service.getWeeklyGoalStats(user.getId());
+        return ResponseEntity.ok(stats);
+    }
+
 }

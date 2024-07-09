@@ -3,6 +3,7 @@ package com.example.savingsappbackend.service.impl;
 import com.example.savingsappbackend.models.Goal;
 import com.example.savingsappbackend.models.User;
 import com.example.savingsappbackend.models.Wallet;
+import com.example.savingsappbackend.models.dto.WeeklyGoalStats;
 import com.example.savingsappbackend.models.exceptions.GoalNotFoundException;
 import com.example.savingsappbackend.repository.GoalRepository;
 import com.example.savingsappbackend.repository.UserRepository;
@@ -12,6 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -75,5 +79,35 @@ public class GoalServiceImplementation implements GoalService{
     public void deleteGoal(Long goalId) {
         Goal goal = this.goalRepository.findById(goalId).orElseThrow(GoalNotFoundException::new);
         this.goalRepository.delete(goal);
+    }
+
+    @Override
+    public List<WeeklyGoalStats> getWeeklyGoalStats(Long userId) {
+        User user = this.userRepository.findById(userId).orElseThrow(GoalNotFoundException::new);
+        List<Goal> userGoals = this.goalRepository.findGoalsByOwner(user);
+
+        LocalDate now = LocalDate.now();
+        LocalDate[] weeksStartDates = {
+                now.minusWeeks(3).with(java.time.DayOfWeek.MONDAY),
+                now.minusWeeks(2).with(java.time.DayOfWeek.MONDAY),
+                now.minusWeeks(1).with(java.time.DayOfWeek.MONDAY),
+                now.with(java.time.DayOfWeek.MONDAY)
+        };
+
+        return Arrays.stream(weeksStartDates)
+                .map(weekStart -> {
+                    LocalDate weekEnd = weekStart.plusDays(6);
+                    long totalGoals = userGoals.stream().filter(goal -> !goal.getTargetDate().isBefore(weekStart) && !goal.getTargetDate().isAfter(weekEnd)).count();
+                    long completedGoals = userGoals.stream().filter(goal -> goal.isCompleted() && !goal.getTargetDate().isBefore(weekStart) && !goal.getTargetDate().isAfter(weekEnd)).count();
+                    long overdueGoals = userGoals.stream().filter(goal -> goal.isOverdued() && goal.getTargetDate().isBefore(weekEnd) && goal.getTargetDate().isAfter(weekStart)).count();
+
+                    WeeklyGoalStats stats = new WeeklyGoalStats();
+                    stats.setPeriod(weekStart.toString() + " - " + weekEnd.toString());
+                    stats.setTotalGoals(totalGoals);
+                    stats.setCompletedGoals(completedGoals);
+                    stats.setOverdueGoals(overdueGoals);
+                    return stats;
+                })
+                .collect(Collectors.toList());
     }
 }
