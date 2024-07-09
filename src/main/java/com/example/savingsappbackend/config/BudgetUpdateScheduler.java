@@ -22,14 +22,14 @@ public class BudgetUpdateScheduler {
     private final GoalRepository goalRepository;
     private final UserRepository userRepository;
     private final TransactionService transactionService;
-    private final NotificationService notificationService; // Add notification service
+    private final NotificationService notificationService;
 
     public BudgetUpdateScheduler(GoalRepository goalRepository, UserRepository userRepository,
                                  TransactionService transactionService, NotificationService notificationService) {
         this.goalRepository = goalRepository;
         this.userRepository = userRepository;
         this.transactionService = transactionService;
-        this.notificationService = notificationService; // Initialize notification service
+        this.notificationService = notificationService;
     }
 
     @Scheduled(cron = "0 * * * * *")
