@@ -5,12 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface GoalService {
-    public Goal getById(Long goalId);
-    public Page<Goal> getAllGoals(Long userId, String search, Pageable pageable) ;
-    public Goal newGoal(Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Long userId, Double savingsAmount, String savingsPeriod);
-    public Goal editGoal(Long goalId, Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Double savingsAmount, String savingsPeriod);
-    public void deleteGoal(Long goalId);
+    Goal getById(Long goalId);
+    Page<Goal> getAllGoals(Long userId, String search, Pageable pageable) ;
+    Goal newGoal(Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Long userId, Double savingsAmount, String savingsPeriod);
+    Goal editGoal(Long goalId, Double currentAmt, Double targetAmt, String title, LocalDate targetDate, String description, Double savingsAmount, String savingsPeriod);
+    void deleteGoal(Long goalId);
 }

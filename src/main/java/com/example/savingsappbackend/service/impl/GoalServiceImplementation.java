@@ -3,7 +3,6 @@ package com.example.savingsappbackend.service.impl;
 import com.example.savingsappbackend.models.Goal;
 import com.example.savingsappbackend.models.User;
 import com.example.savingsappbackend.models.Wallet;
-import com.example.savingsappbackend.models.dto.UserDto;
 import com.example.savingsappbackend.models.exceptions.GoalNotFoundException;
 import com.example.savingsappbackend.repository.GoalRepository;
 import com.example.savingsappbackend.repository.UserRepository;
@@ -13,8 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class GoalServiceImplementation implements GoalService{

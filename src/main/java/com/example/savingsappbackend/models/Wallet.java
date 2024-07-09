@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.transaction.NoTransactionException;
-import org.springframework.web.server.MethodNotAllowedException;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;

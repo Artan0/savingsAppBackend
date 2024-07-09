@@ -5,7 +5,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.savingsappbackend.models.dto.UserDto;
-import com.example.savingsappbackend.service.UserService;
 import com.example.savingsappbackend.service.impl.UserServiceImplementation;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +61,5 @@ public class UserAuthenticationProvider {
         DecodedJWT decodedJWT = JWT.decode(token.substring(7));
         return decodedJWT.getSubject();
     }
-
 
 }

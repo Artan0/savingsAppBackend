@@ -1,7 +1,6 @@
 package com.example.savingsappbackend.web;
 
 import com.example.savingsappbackend.config.UserAuthenticationProvider;
-import com.example.savingsappbackend.models.Wallet;
 import com.example.savingsappbackend.models.dto.BalanceHistoryDto;
 import com.example.savingsappbackend.models.dto.UserDto;
 import com.example.savingsappbackend.service.UserService;

@@ -1,6 +1,5 @@
 package com.example.savingsappbackend.repository;
 
-import com.example.savingsappbackend.models.Goal;
 import com.example.savingsappbackend.models.Transaction;
 import com.example.savingsappbackend.models.User;
 import org.springframework.data.domain.Page;

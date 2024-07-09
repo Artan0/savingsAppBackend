@@ -11,7 +11,6 @@ import com.example.savingsappbackend.models.exceptions.AppException;
 import com.example.savingsappbackend.repository.UserRepository;
 import com.example.savingsappbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
