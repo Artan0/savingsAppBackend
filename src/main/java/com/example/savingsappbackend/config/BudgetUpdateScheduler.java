@@ -1,8 +1,12 @@
 package com.example.savingsappbackend.config;
 
-import com.example.savingsappbackend.models.*;
+import com.example.savingsappbackend.models.Goal;
+import com.example.savingsappbackend.models.TransactionType;
+import com.example.savingsappbackend.models.User;
+import com.example.savingsappbackend.models.Wallet;
 import com.example.savingsappbackend.repository.GoalRepository;
 import com.example.savingsappbackend.repository.UserRepository;
+import com.example.savingsappbackend.service.NotificationService;
 import com.example.savingsappbackend.service.TransactionService;
 import jakarta.transaction.Transactional;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,12 +22,15 @@ public class BudgetUpdateScheduler {
     private final GoalRepository goalRepository;
     private final UserRepository userRepository;
     private final TransactionService transactionService;
-    public BudgetUpdateScheduler(GoalRepository goalRepository, UserRepository userRepository, TransactionService transactionService) {
+    private final NotificationService notificationService; // Add notification service
+
+    public BudgetUpdateScheduler(GoalRepository goalRepository, UserRepository userRepository,
+                                 TransactionService transactionService, NotificationService notificationService) {
         this.goalRepository = goalRepository;
         this.userRepository = userRepository;
         this.transactionService = transactionService;
+        this.notificationService = notificationService; // Initialize notification service
     }
-
 
     @Scheduled(cron = "0 * * * * *")
     @Transactional
@@ -40,8 +47,6 @@ public class BudgetUpdateScheduler {
                     continue;
                 }
 
-
-
 //                ALTER TABLE transactions
 //                DROP CONSTRAINT IF EXISTS transactions_type_check;
 //
@@ -56,7 +61,13 @@ public class BudgetUpdateScheduler {
                 userRepository.save(user);
                 goal.setLastUpdated(now);
                 goalRepository.save(goal);
-                transactionService.createTransaction("Savings", LocalDate.now(), goal.getSavingsAmount(), TransactionType.SAVINGS,user.getId());
+                transactionService.createTransaction("Savings", LocalDate.now(), goal.getSavingsAmount(), TransactionType.SAVINGS, user.getId());
+
+                if (goal.getCurrentAmount() >= goal.getTargetAmount()) {
+                    goal.setCompleted(true);
+                    goalRepository.save(goal);
+                    notificationService.createNotification("Goal " + goal.getTitle() + " successfully completed.", user.getId());
+                }
             }
         }
     }
@@ -89,6 +100,5 @@ public class BudgetUpdateScheduler {
             goal.setCompleted(true);
             return false;
         }
-
     }
 }
